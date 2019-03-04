@@ -54,13 +54,13 @@ cp -R %{fname} %{buildroot}/srv/salt/
 
 # SUMA Specific
 mkdir -p %{buildroot}%{fdir}/states/%{fname}
-mkdir -p %{buildroot}%{fdir}/metadata/%{fname}
+#mkdir -p %{buildroot}%{fdir}/metadata/%{fname}
 cp -R %{fname} %{buildroot}%{fdir}/states
-cp -R form.yml %{buildroot}%{fdir}/metadata/%{fname}
-if [ -f metadata.yml ]
-then
-  cp -R metadata.yml %{buildroot}%{fdir}/metadata/%{fname}
-fi
+#cp -R form.yml %{buildroot}%{fdir}/metadata/%{fname}
+#if [ -f metadata.yml ]
+#then
+#  cp -R metadata.yml %{buildroot}%{fdir}/metadata/%{fname}
+#fi
 
 
 %files
@@ -78,13 +78,13 @@ fi
 %dir %{_datadir}/susemanager
 %dir %{fdir}
 %dir %{fdir}/states
-%dir %{fdir}/metadata
+#%dir %{fdir}/metadata
 %{fdir}/states/%{fname}
-%{fdir}/metadata/%{fname}
+#%{fdir}/metadata/%{fname}
 
 %dir %attr(0755, root, salt) %{_datadir}/susemanager
 %dir %attr(0755, root, salt) %{fdir}
 %dir %attr(0755, root, salt) %{fdir}/states
-%dir %attr(0755, root, salt) %{fdir}/metadata
+#%dir %attr(0755, root, salt) %{fdir}/metadata
 
 %changelog
