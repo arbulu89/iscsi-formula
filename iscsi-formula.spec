@@ -59,7 +59,12 @@ cp -R %{fname} %{buildroot}%{fdir}/states
 
 %files
 %defattr(-,root,root,-)
+# %license macro is not available on older releases
+%if 0%{?sle_version} <= 120300
+%doc LICENSE
+%else
 %license LICENSE
+%endif
 %doc README.rst
 /srv/salt/%{fname}
 
@@ -67,7 +72,12 @@ cp -R %{fname} %{buildroot}%{fdir}/states
 
 %files suma
 %defattr(-,root,root,-)
+# %license macro is not available on older releases
+%if 0%{?sle_version} <= 120300
+%doc LICENSE
+%else
 %license LICENSE
+%endif
 %doc README.rst
 %dir %{_datadir}/susemanager
 %dir %{fdir}
