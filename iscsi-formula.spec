@@ -20,7 +20,8 @@
 
 Name:           iscsi-formula
 Version:        0.1.0
-Release:        1
+Group:          System/Packages
+Release:        0
 Summary:        Configure iSCSI targets and initiator on GNU/Linux and FreeBSD
 
 License:        Apache-2.0
@@ -29,18 +30,16 @@ Source0:        %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 
+# On SLE/Leap 15-SP1 and TW requires the new salt-formula configuration location.
+%if ! (0%{?sle_version:1} && 0%{?sle_version} < 150100)
+Requires:       salt-formulas-configuration
+%endif
+
 %define fname iscsi
-%define fdir  %{_datadir}/susemanager/formulas
+%define fdir  %{_datadir}/salt-formulas
 
 %description
 Configure iSCSI targets and initiator on GNU/Linux and FreeBSD
-
-# package to deploy on SUMA specific path.
-%package suma
-Summary:        Configure iSCSI targets and initiator on GNU/Linux and FreeBSD (SUMA specific)
-
-%description suma
-Configure iSCSI targets and initiator on GNU/Linux and FreeBSD (SUMA specific)
 
 %prep
 %setup -q
@@ -48,44 +47,52 @@ Configure iSCSI targets and initiator on GNU/Linux and FreeBSD (SUMA specific)
 %build
 
 %install
-pwd
+
+# before SUMA 4.0/15-SP1, install on the standard Salt Location.
+%if 0%{?sle_version:1} && 0%{?sle_version} < 150100
+
 mkdir -p %{buildroot}/srv/salt/
 cp -R %{fname} %{buildroot}/srv/salt/
 
-# SUMA Specific
+%else
+
+# On SUMA 4.0/15-SP1, a single shared directory will be used.
 mkdir -p %{buildroot}%{fdir}/states/%{fname}
+mkdir -p %{buildroot}%{fdir}/metadata/%{fname}
 cp -R %{fname} %{buildroot}%{fdir}/states
 
+%endif
+
+%if 0%{?sle_version:1} && 0%{?sle_version} < 150100
 
 %files
 %defattr(-,root,root,-)
-# %license macro is not available on older releases
-%if 0%{?sle_version} <= 120300
-%doc LICENSE
+%if 0%{?sle_version} < 120300
+%doc README.rst LICENSE
 %else
+%doc README.rst
 %license LICENSE
 %endif
-%doc README.rst
 /srv/salt/%{fname}
 
 %dir %attr(0755, root, salt) /srv/salt
 
-%files suma
-%defattr(-,root,root,-)
-# %license macro is not available on older releases
-%if 0%{?sle_version} <= 120300
-%doc LICENSE
 %else
-%license LICENSE
-%endif
+
+%files
+%defattr(-,root,root,-)
 %doc README.rst
-%dir %{_datadir}/susemanager
+%license LICENSE
 %dir %{fdir}
 %dir %{fdir}/states
+%dir %{fdir}/metadata
 %{fdir}/states/%{fname}
+%{fdir}/metadata/%{fname}
 
-%dir %attr(0755, root, salt) %{_datadir}/susemanager
 %dir %attr(0755, root, salt) %{fdir}
 %dir %attr(0755, root, salt) %{fdir}/states
+%dir %attr(0755, root, salt) %{fdir}/metadata
+
+%endif
 
 %changelog
