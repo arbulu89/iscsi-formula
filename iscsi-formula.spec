@@ -19,7 +19,7 @@
 # See also http://en.opensuse.org/openSUSE:Specfile_guidelines
 
 Name:           iscsi-formula
-Version:        0.1.0
+Version:        0.1.1
 Group:          System/Packages
 Release:        0
 Summary:        Configure iSCSI targets and initiator on GNU/Linux and FreeBSD
@@ -89,9 +89,9 @@ cp -R %{fname} %{buildroot}%{fdir}/states
 %{fdir}/states/%{fname}
 %{fdir}/metadata/%{fname}
 
-%dir %attr(0755, root, salt) %{fdir}
-%dir %attr(0755, root, salt) %{fdir}/states
-%dir %attr(0755, root, salt) %{fdir}/metadata
+%dir %attr(-, root, root) %{fdir}
+%dir %attr(-, root, root) %{fdir}/states
+%dir %attr(-, root, root) %{fdir}/metadata
 
 %endif
 
