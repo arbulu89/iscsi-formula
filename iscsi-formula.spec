@@ -29,11 +29,7 @@ Url:            https://github.com/saltstack-formulas/%{name}
 Source0:        %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
-
-# On SLE/Leap 15-SP1 and TW requires the new salt-formula configuration location.
-%if ! (0%{?sle_version:1} && 0%{?sle_version} < 150100)
 Requires:       salt-formulas-configuration
-%endif
 
 %define fname iscsi
 %define fdir  %{_datadir}/salt-formulas
@@ -48,22 +44,10 @@ Configure iSCSI targets and initiator on GNU/Linux and FreeBSD
 
 %install
 
-# before SUMA 4.0/15-SP1, install on the standard Salt Location.
-%if 0%{?sle_version:1} && 0%{?sle_version} < 150100
-
-mkdir -p %{buildroot}/srv/salt/
-cp -R %{fname} %{buildroot}/srv/salt/
-
-%else
-
-# On SUMA 4.0/15-SP1, a single shared directory will be used.
 mkdir -p %{buildroot}%{fdir}/states/%{fname}
 mkdir -p %{buildroot}%{fdir}/metadata/%{fname}
 cp -R %{fname} %{buildroot}%{fdir}/states
 
-%endif
-
-%if 0%{?sle_version:1} && 0%{?sle_version} < 150100
 
 %files
 %defattr(-,root,root,-)
@@ -73,26 +57,12 @@ cp -R %{fname} %{buildroot}%{fdir}/states
 %doc README.rst
 %license LICENSE
 %endif
-/srv/salt/%{fname}
 
-%dir %attr(0755, root, salt) /srv/salt
+%dir %attr(0755, root, salt) %{fdir}
+%dir %attr(0755, root, salt) %{fdir}/states
+%dir %attr(0755, root, salt) %{fdir}/metadata
 
-%else
-
-%files
-%defattr(-,root,root,-)
-%doc README.rst
-%license LICENSE
-%dir %{fdir}
-%dir %{fdir}/states
-%dir %{fdir}/metadata
-%{fdir}/states/%{fname}
-%{fdir}/metadata/%{fname}
-
-%dir %attr(-, root, root) %{fdir}
-%dir %attr(-, root, root) %{fdir}/states
-%dir %attr(-, root, root) %{fdir}/metadata
-
-%endif
+%attr(0755, root, salt) %{fdir}/states/%{fname}
+%attr(0755, root, salt) %{fdir}/metadata/%{fname}
 
 %changelog
