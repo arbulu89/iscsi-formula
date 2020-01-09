@@ -52,9 +52,9 @@ cp -R %{fname} %{buildroot}%{fdir}/states
 %files
 %defattr(-,root,root,-)
 %if 0%{?sle_version} < 120300
-%doc README.rst LICENSE
+%doc docs/README.rst LICENSE
 %else
-%doc README.rst
+%doc docs/README.rst
 %license LICENSE
 %endif
 
