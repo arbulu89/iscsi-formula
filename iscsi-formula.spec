@@ -19,7 +19,7 @@
 # See also http://en.opensuse.org/openSUSE:Specfile_guidelines
 
 Name:           iscsi-formula
-Version:        0.1.1
+Version:        1.1.1
 Group:          System/Packages
 Release:        0
 Summary:        Configure iSCSI targets and initiator on GNU/Linux and FreeBSD
